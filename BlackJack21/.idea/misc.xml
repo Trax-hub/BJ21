@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/bet_button.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/bet_edit_text.xml" value="0.17708333333333334" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/button_disabled.xml" value="0.17708333333333334" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/button_enabled.xml" value="0.17708333333333334" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/button_test.xml" value="0.17708333333333334" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/card.xml" value="0.3026041666666667" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/card_layout.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/ic_add.xml" value="0.3026041666666667" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/ic_hit.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/drawable/shadow.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/card_layout.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/card_list_adapter.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/content_main.xml" value="0.2953703703703704" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
