@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintTop"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="490dp"
         android:layout_marginTop="16dp"
         android:background="@color/background2"
         app:layout_constraintBottom_toTopOf="@+id/constraintBottom"
@@ -18,25 +18,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ListView
-            android:id="@+id/dealerList"
+        <AbsoluteLayout
+            android:id="@+id/constraintPlayer"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/background1"
-            app:layout_constraintBottom_toTopOf="@+id/playerList"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ListView>
+            android:layout_height="210dp">
 
-        <ListView
-            android:id="@+id/playerList"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/background1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dealerList"></ListView>
+            <ImageView
+                android:id="@+id/dc1"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="134dp"
+                android:layout_y="103dp"
+                android:src="@drawable/d1" />
+
+            <ImageView
+                android:id="@+id/dc2"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="154dp"
+                android:layout_y="83dp"
+                android:src="@drawable/d2"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/dc3"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="174dp"
+                android:layout_y="63dp"
+                android:src="@drawable/d3"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/dc4"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="194dp"
+                android:layout_y="43dp"
+                android:src="@drawable/d4"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/dc5"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="214dp"
+                android:layout_y="23dp"
+                android:src="@drawable/d5"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/dc6"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_x="234dp"
+                android:layout_y="3dp"
+                android:src="@drawable/d6"
+                android:visibility="visible" />
+
+
+
+        </AbsoluteLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -46,7 +88,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
         android:background="@color/background1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +98,6 @@
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +120,7 @@
                     android:background="@drawable/bet_edit_text"
                     android:elevation="5dp"
                     android:hint="@string/bet"
+                    android:inputType="numberDecimal"
                     android:padding="8dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
@@ -90,6 +131,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/halfBet"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginRight="1dp"
@@ -98,6 +140,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/doubleBet"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@color/background3"
@@ -129,8 +172,10 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
@@ -178,7 +223,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/button_enabled"
                 android:text="Split"
                 android:textColor="@color/white"
@@ -193,7 +237,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/button_enabled"
                 android:text="Double"
                 android:textColor="@color/white"
