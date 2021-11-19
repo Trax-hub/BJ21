@@ -10,9 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.StackView;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
     Game game = new Game();
     AppCompatButton hitButton, standButton, splitButton, doubleButton, betButton, halfBet, doubleBet;
     EditText bet;
-    ImageView dc1, dc2, dc3, dc4, dc5, dc6, pc1, pc2, pc3, pc4, pc5, pc6;
+    TextView balance, playerValue, dealerValue;
+    ImageView dc1, dc2, dc3, dc4, dc5, dc6, pc1, pc2, pc3, pc4, pc5, pc6, stack;
+    StackView playerView, dealerView;
 
 
     @Override
@@ -49,27 +54,64 @@ public class MainActivity extends AppCompatActivity {
         halfBet = findViewById(R.id.halfBet);
         doubleBet = findViewById(R.id.doubleBet);
 
+        //TextView
+        balance = findViewById(R.id.balance);
+        playerValue = findViewById(R.id.playerValue);
+        dealerValue = findViewById(R.id.dealerValue);
+
         //Bet (EditText)
         bet = findViewById(R.id.bet);
 
-        //Cards (ImageView)
-        //Dealer's
-        dc1 = findViewById(R.id.dc1);
-        dc2 = findViewById(R.id.dc2);
-        dc3 = findViewById(R.id.dc3);
-        dc4 = findViewById(R.id.dc4);
-        dc5 = findViewById(R.id.dc5);
-        dc6 = findViewById(R.id.dc6);
+        //Stack cards
+        stack = findViewById(R.id.stack);
 
-        //Player's
-        //TODO
+        //Player & Dealer views
+        playerView = findViewById(R.id.playerView);
+        dealerView = findViewById(R.id.dealerView);
 
-        initializeCards();
+
+        balance.setText(Double.toString(game.getPlayer().getBalance()));
+
+        betButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearAll();
+
+                game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
+                game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
+                game.distribute();
+                balance.setText(Double.toString(game.getPlayer().getBalance()));
+
+                try {
+                    actualizeCards();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                enable(hitButton);
+                enable(standButton);
+                disable(splitButton);
+                disable(doubleButton);
+            }
+        });
 
         hitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                game.hit(game.getPlayer());
+                if(!game.getPlayer().getHand().isBusted() && !game.getPlayer().isStand()){
+                    game.hit(game.getPlayer());
+                    try {
+                        actualizeCards();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(game.getPlayer().getHand().isBusted()){
+                        disable(hitButton);
+                        disable(standButton);
+                        disable(splitButton);
+                        disable(doubleButton);
+                    }
+                }
             }
         });
 
@@ -77,6 +119,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 game.stand(game.getPlayer());
+
+                disable(hitButton);
+                disable(splitButton);
+                disable(doubleButton);
+                disable(standButton);
+
+                try {
+                    actualizeCards();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -91,19 +144,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 game.dobble(game.getPlayer());
-            }
-        });
 
-        betButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
-                game.distribute();
-                try {
-                    actualizeCards();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                enable(hitButton);
             }
         });
 
@@ -122,67 +164,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initializeCards(){
-        dc1.setVisibility(View.INVISIBLE);
-        dc2.setVisibility(View.INVISIBLE);
-        dc3.setVisibility(View.INVISIBLE);
-        dc4.setVisibility(View.INVISIBLE);
-        dc5.setVisibility(View.INVISIBLE);
-        dc6.setVisibility(View.INVISIBLE);
-    }
-
     public void actualizeCards() throws InterruptedException {
-        switch(game.getPlayer().getHand().getcardList().size()){
-            default :
-                System.out.println("There's a problem sir");
-                break;
-            case 2 :
-                try
-                {
-                    display1();
-                    Thread.sleep(1000);
-                    display2();
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                break;
-            case 3 :
-                Card c3 = (Card) game.getPlayer().getHand().getcardList().get(2);
-                dc3.setImageResource(this.getResources().getIdentifier( c3.getRes(), "drawable", this.getPackageName()));
-                dc3.setVisibility(View.VISIBLE);
-                break;
-            case 4 :
-                Card c4 = (Card) game.getPlayer().getHand().getcardList().get(2);
-                dc4.setImageResource(this.getResources().getIdentifier( c4.getRes(), "drawable", this.getPackageName()));
-                dc4.setVisibility(View.VISIBLE);
-                break;
-            case 5 :
-                Card c5 = (Card) game.getPlayer().getHand().getcardList().get(2);
-                dc5.setImageResource(this.getResources().getIdentifier( c5.getRes(), "drawable", this.getPackageName()));
-                dc5.setVisibility(View.VISIBLE);
-                break;
-            case 6:
-                Card c6 = (Card) game.getPlayer().getHand().getcardList().get(2);
-                dc6.setImageResource(this.getResources().getIdentifier( c6.getRes(), "drawable", this.getPackageName()));
-                dc6.setVisibility(View.VISIBLE);
-                break;
-        }
+        //playerView.set;
+        playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+        dealerValue.setText(Integer.toString(game.getDealer().getHand().getValue()));
     }
 
-    public void display1(){
-        Card c1 = (Card) game.getPlayer().getHand().getcardList().get(0);
-        dc1.setImageResource(this.getResources().getIdentifier( c1.getRes(), "drawable", this.getPackageName()));
-        dc1.setVisibility(View.VISIBLE);
+    private void enable(AppCompatButton button) {
+        button.setEnabled(true);
+        button.setTextColor(getResources().getColor(R.color.white));
+        button.setBackgroundResource(R.drawable.button_enabled);
     }
 
-    public void display2(){
-        Card c2 = (Card) game.getPlayer().getHand().getcardList().get(1);
-        dc1.setImageResource(this.getResources().getIdentifier( c2.getRes(), "drawable", this.getPackageName()));
-        dc2.setVisibility(View.VISIBLE);
+    private void disable(AppCompatButton button) {
+        button.setEnabled(false);
+        button.setTextColor(getResources().getColor(R.color.white_disabled));
+        button.setBackgroundResource(R.drawable.button_disabled);
     }
 
+    private void clearAll(){
+        //Clear cards
+        pc1.setImageResource(0);
+        pc2.setImageResource(0);
+        pc3.setImageResource(0);
+        pc4.setImageResource(0);
+        pc5.setImageResource(0);
+        pc6.setImageResource(0);
+
+        dc1.setImageResource(0);
+        dc2.setImageResource(0);
+        dc3.setImageResource(0);
+        dc4.setImageResource(0);
+        dc5.setImageResource(0);
+        dc6.setImageResource(0);
+
+        //clear Hands
+        game.getPlayer().setHand(new Hand());
+        game.getDealer().setHand(new Hand());
+    }
 }
 
 

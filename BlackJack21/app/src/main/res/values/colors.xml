@@ -9,7 +9,7 @@
     <color name="orange">#FF9D00</color>
     <color name="purple">#9000FF</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="white_disable">#7B8997</color>
+    <color name="white_disabled">#7B8997</color>
 
     <color name="background1">#213743</color>
     <color name="background2">#0F212E</color>

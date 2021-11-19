@@ -9,13 +9,14 @@ public class Dealer {
 
     public Hand getHand(){ return this.hand;    }
 
-    public void play(){
+    public void setHand(Hand hand){
+        this.hand = hand;
+    }
+
+    public void play(CardStack stack){
         while(hand.getValue() < 17){
-            hit();
+            hand.add(stack.getRandomCard());
         }
     }
 
-    public void hit(){
-
-    }
 }

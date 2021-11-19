@@ -15,16 +15,16 @@ public class CardStack {
 
     public Card getRandomCard(){
         Random rn = new Random();
-        int rnCardIdx = rn.nextInt(52) + 1;
+        int rnCardIdx = rn.nextInt(52);
         return (Card) this.cardList.get(rnCardIdx);
     }
 
     public void addAllTheCards(){
         for(int nb = 1; nb <= 13; nb++) {
-            cardList.add(new Card(nb, "Clubs"));
-            cardList.add(new Card(nb, "Diamonds"));
-            cardList.add(new Card(nb, "Heart"));
-            cardList.add(new Card(nb, "Spades"));
+            cardList.add(new Card(nb, "c"));
+            cardList.add(new Card(nb, "d"));
+            cardList.add(new Card(nb, "h"));
+            cardList.add(new Card(nb, "s"));
         }
     }
 }

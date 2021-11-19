@@ -16,8 +16,6 @@ public class Game {
         return this.player;
     }
 
-    public void setPlayer(Player player){ this.player = player; }
-
     public Dealer getDealer(){
         return this.dealer;
     }
@@ -28,13 +26,18 @@ public class Game {
 
 
     public void hit(Player player){
-        if(player.isStand()) {
+        if(!player.isStand() && !player.getHand().isBusted()) {
             player.getHand().add(stack.getRandomCard());
+        }
+        if(player.getHand().isBusted()){
+            stand(this.player);
         }
     }
 
     public void stand(Player player){
-        dealer.play();
+        player.setStand(true);
+        dealer.play(stack);
+        result();
     }
 
     public void dobble(Player player){
@@ -54,6 +57,20 @@ public class Game {
         //Give 2 random cards from the stack to the Player
         this.player.getHand().add(this.getStack().getRandomCard());
         this.player.getHand().add(this.getStack().getRandomCard());
+    }
+
+    public void result(){
+        if(player.getHand().getValue() == 21 && player.getHand().getcardList().size() == 2){
+            player.setBalance(player.getBalance() + (2.5 * player.getBet()));
+        }
+        if(!player.getHand().isBusted() && !dealer.getHand().isBusted()){
+            if(player.getHand().getValue() > player.getHand().getValue()){
+                player.setBalance(player.getBalance() + (2 * player.getBet()));
+            }
+            if(player.getHand().getValue() == player.getHand().getValue()){
+                player.setBalance(player.getBalance() + player.getBet());
+            }
+        }
     }
 
 
