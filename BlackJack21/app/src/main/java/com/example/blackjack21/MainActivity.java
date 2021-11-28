@@ -1,173 +1,320 @@
 package com.example.blackjack21;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Path;
 import android.os.Bundle;
-import android.util.SparseIntArray;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.StackView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    Game game = new Game();
-    AppCompatButton hitButton, standButton, splitButton, doubleButton, betButton, halfBet, doubleBet;
+    AppCompatButton hitButton, standButton, doubleButton, betButton, halfBet, doubleBet;
     EditText bet;
-    TextView balance, playerValue, dealerValue;
-    ImageView dc1, dc2, dc3, dc4, dc5, dc6, pc1, pc2, pc3, pc4, pc5, pc6, stack;
-    StackView playerView, dealerView;
+    TextView balance, playerValue, dealerValue, result;
+    ImageView distributableCard, distributableCard2, stack;
+
+    Game game = new Game();
+
+    //Lists who stocks card images/texts and cards themselves
+    ArrayList<TextView> playerText1 = new ArrayList<>();
+    ArrayList<TextView> playerText2 = new ArrayList<>();
+    ArrayList<TextView> dealerText1 = new ArrayList<>();
+    ArrayList<TextView> dealerText2 = new ArrayList<>();
+    ArrayList<ImageView> playerImages = new ArrayList<>();
+    ArrayList<ImageView> dealerImages = new ArrayList<>();
+    ArrayList<ConstraintLayout> dealerCard = new ArrayList<>();
+    ArrayList<ConstraintLayout> playerCard = new ArrayList<>();
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadLayoutElements();
+        init();
 
-        //Buttons
-        hitButton = findViewById(R.id.hitButton);
-        standButton = findViewById(R.id.standButton);
-        splitButton = findViewById(R.id.splitButton);
-        doubleButton = findViewById(R.id.doubleButton);
-        betButton = findViewById(R.id.betButton);
-        halfBet = findViewById(R.id.halfBet);
-        doubleBet = findViewById(R.id.doubleBet);
+        betButton.setOnClickListener(v -> {
+            try {
+                bet();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
-        //TextView
-        balance = findViewById(R.id.balance);
-        playerValue = findViewById(R.id.playerValue);
-        dealerValue = findViewById(R.id.dealerValue);
+        hitButton.setOnClickListener(v -> {
+            hit();
+        });
 
-        //Bet (EditText)
-        bet = findViewById(R.id.bet);
+        standButton.setOnClickListener(v -> {
+            stand();
+        });
 
-        //Stack cards
-        stack = findViewById(R.id.stack);
+        doubleButton.setOnClickListener(v -> {
+            dobble();
+        });
 
-        //Player & Dealer views
-        playerView = findViewById(R.id.playerView);
-        dealerView = findViewById(R.id.dealerView);
-
-
-        balance.setText(Double.toString(game.getPlayer().getBalance()));
-
-        betButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearAll();
-
-                game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
-                game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
-                game.distribute();
-                balance.setText(Double.toString(game.getPlayer().getBalance()));
-
-                try {
-                    actualizeCards();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        halfBet.setOnClickListener(v -> {
+            if ((TextUtils.isEmpty(bet.getText().toString()) || Double.parseDouble(bet.getText().toString()) <= 0.)) {
+                bet.setError("Bet must be over 0");
+            }   else {
+                    bet.setText(Double.toString(Double.parseDouble(bet.getText().toString()) / 2));
                 }
-                enable(hitButton);
-                enable(standButton);
-                disable(splitButton);
-                disable(doubleButton);
-            }
         });
 
-        hitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!game.getPlayer().getHand().isBusted() && !game.getPlayer().isStand()){
-                    game.hit(game.getPlayer());
-                    try {
-                        actualizeCards();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if(game.getPlayer().getHand().isBusted()){
-                        disable(hitButton);
-                        disable(standButton);
-                        disable(splitButton);
-                        disable(doubleButton);
-                    }
+        doubleBet.setOnClickListener(v -> {
+            if ((TextUtils.isEmpty(bet.getText().toString()) || Double.parseDouble(bet.getText().toString()) <= 0.)) {
+                bet.setError("Bet must be over 0");
+            } else {
+                if(Double.parseDouble(bet.getText().toString()) * 2 > game.getPlayer().getBalance()){
+                    System.out.println("here");
+                    bet.setText(Double.toString(game.getPlayer().getBalance()));
+                }else {
+                    bet.setText(Double.toString(Double.parseDouble(bet.getText().toString()) * 2));
                 }
-            }
-        });
-
-        standButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                game.stand(game.getPlayer());
-
-                disable(hitButton);
-                disable(splitButton);
-                disable(doubleButton);
-                disable(standButton);
-
-                try {
-                    actualizeCards();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        splitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                game.split(game.getPlayer());
-            }
-        });
-
-        doubleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                game.dobble(game.getPlayer());
-
-                enable(hitButton);
-            }
-        });
-
-        halfBet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bet.setText(Integer.toString(Integer.parseInt(bet.getText().toString()) / 2));
-            }
-        });
-
-        doubleBet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bet.setText(Integer.toString(Integer.parseInt(bet.getText().toString()) * 2));
             }
         });
     }
+    private void bet() throws InterruptedException {
+        if((TextUtils.isEmpty(bet.getText().toString()) || Double.parseDouble(bet.getText().toString()) <= 0.)) {
+            bet.setError("Bet must be over 0");
+            return;
+        }
+        if(Double.parseDouble(bet.getText().toString()) > game.getPlayer().getBalance()) {
+            bet.setError("Not enough money");
+            return;
+        }
 
-    public void actualizeCards() throws InterruptedException {
-        //playerView.set;
-        playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+        init();
+
+        disable(hitButton);
+        disable(standButton);
+        disable(doubleButton);
+        disable(betButton);
+
+        firstDraw();
+    }
+
+    public void dobble(){
+        game.getPlayer().dobble(game.getStack());
+        playerAnimation(game.getPlayer().getHand().getcardList().size() - 1);
+        balance.setText(Double.toString(game.getPlayer().getBalance()));
+        stand();
+    }
+
+    private void hit() {
+        if(!game.getPlayer().getHand().isBusted() && !game.getPlayer().isStand()){
+            game.getPlayer().pick(game.getStack());
+            playerAnimation(game.getPlayer().getHand().getcardList().size() - 1);
+            disable(doubleButton);
+            disable(hitButton);
+            disable(standButton);
+
+            if(game.getPlayer().getHand().isBusted()){
+                stand();
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void stand() {
+        game.getPlayer().setStand(true);
+
+        loadDealerCard((Card) game.getDealer().getHand().getcardList().get(1), 1);
+
+        int startingNbCard = game.getDealer().getHand().getcardList().size();
+
+        while(!game.getDealer().isStand() && !game.getDealer().getHand().isBusted()){
+            game.getDealer().pick(game.getStack());
+            playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+        }
+        if(!(startingNbCard == game.getDealer().getHand().getcardList().size())){
+            dealerAnimation(startingNbCard);
+        }else{
+            enableBetButton();
+        }
         dealerValue.setText(Integer.toString(game.getDealer().getHand().getValue()));
+
+        game.result();
+        if(game.getPlayer().getLastWin() > game.getPlayer().getBet()){
+            dealerValue.setTextColor(Color.RED);
+            playerValue.setTextColor(Color.GREEN);
+            result.setVisibility(View.VISIBLE);
+            result.setTextColor(Color.GREEN);
+            result.setText("You won");
+        }else if(game.getPlayer().getLastWin() < game.getPlayer().getBet()){
+            result.setVisibility(View.VISIBLE);
+            playerValue.setTextColor(Color.RED);
+            dealerValue.setTextColor(Color.GREEN);
+            result.setTextColor(Color.RED);
+            result.setText("You lose");
+        }else{
+            result.setVisibility(View.VISIBLE);
+            result.setTextColor(Color.WHITE);
+            result.setText("Draw");
+        }
+
+        balance.setText(Double.toString(game.getPlayer().getBalance()));
+        disable(hitButton);
+        disable(doubleButton);
+        disable(standButton);
+    }
+
+    private void enableBetButton() {
+        betButton.setBackgroundResource(R.drawable.bet_button);
+        betButton.setTextColor(Color.BLACK);
+        betButton.setEnabled(true);
+    }
+
+    private void firstDraw() {
+        game.getPlayer().pick(game.getStack());
+        game.getPlayer().pick(game.getStack());
+        game.getDealer().pick(game.getStack());
+        dealerValue.setText(Integer.toString(game.getDealer().getHand().getValue()));
+        game.getDealer().pick(game.getStack());
+
+        if((game.getPlayer().getHand().getValue() == 21 && game.getPlayer().getHand().getcardList().size() == 2)
+                && !(game.getDealer().getHand().getValue() == 21 && game.getDealer().getHand().getcardList().size() == 2)){
+            stand();
+        }
+
+        playerAnimation(0);
+        dealerAnimation(0);
+    }
+
+    private void loadPlayerCard(Card card, int i){
+        playerText1.get(i).setText(card.getName());
+        playerText2.get(i).setText(card.getName());
+        playerImages.get(i).setImageResource(getResources().getIdentifier(card.getColor(), "drawable", getPackageName()));
+        if(card.getColor().equals("h") || card.getColor().equals("d")){
+            playerText1.get(i).setTextColor(Color.RED);
+            playerText2.get(i).setTextColor(Color.RED);
+        }else{
+            playerText1.get(i).setTextColor(Color.BLACK);
+            playerText2.get(i).setTextColor(Color.BLACK);
+        }
+    }
+
+    private void loadDealerCard(Card card, int i){
+        dealerText1.get(1).setVisibility(View.VISIBLE);
+        dealerText2.get(1).setVisibility(View.VISIBLE);
+        dealerImages.get(1).setVisibility(View.VISIBLE);
+        dealerCard.get(1).setBackgroundResource(R.drawable.card);
+        dealerText1.get(i).setText(card.getName());
+        dealerText2.get(i).setText(card.getName());
+        dealerImages.get(i).setImageResource(getResources().getIdentifier(card.getColor(), "drawable", getPackageName()));
+        if(card.getColor().equals("h") || card.getColor().equals("d")){
+            dealerText1.get(i).setTextColor(Color.RED);
+            dealerText2.get(i).setTextColor(Color.RED);
+        }else{
+            dealerText1.get(i).setTextColor(Color.BLACK);
+            dealerText2.get(i).setTextColor(Color.BLACK);
+        }
+    }
+
+    private void playerAnimation(int numero) {
+        distributableCard.setVisibility(View.VISIBLE);
+        distributableCard.bringToFront();
+        Path path = new Path();
+        path.lineTo(playerCard.get(numero).getX(), playerCard.get(numero).getY());
+        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard, View.X, View.Y, path);
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                distributableCard.setVisibility(View.INVISIBLE);
+                playerCard.get(numero).setVisibility(View.VISIBLE);
+                loadPlayerCard(game.getPlayerCardList().get(numero), numero);
+                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+
+                if(numero < game.getPlayer().getHand().getcardList().size() - 1){
+                    playerAnimation(numero + 1);
+                }
+
+                if(numero >= 1){
+                    enable(standButton);
+                    enable(hitButton);
+                }
+
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) { }
+            @Override
+            public void onAnimationRepeat(Animator animation) { }
+            @Override
+            public void onAnimationStart(Animator animation) { }
+        });
+        animator.start();
+    }
+
+    private void dealerAnimation(int numero) {
+        distributableCard2.setVisibility(View.VISIBLE);
+        distributableCard2.bringToFront();
+        Path path = new Path();
+        path.lineTo(dealerCard.get(numero).getX(), dealerCard.get(numero).getY());
+        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard2, View.X, View.Y, path);
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                distributableCard2.setVisibility(View.INVISIBLE);
+                dealerCard.get(numero).setVisibility(View.VISIBLE);
+                if(numero == 1){
+                    hideSecondCard();
+                }else {
+                    loadDealerCard(game.getDealerCardList().get(1), 1);
+                    loadDealerCard(game.getDealerCardList().get(numero), numero);
+                    enable(standButton);
+                    enable(hitButton);
+                    enable(doubleButton);
+                }
+                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+
+                if(numero < game.getDealer().getHand().getcardList().size() - 1){
+                    dealerAnimation(numero + 1);
+                }
+
+                if(game.getPlayer().isStand() && numero == game.getDealer().getHand().getcardList().size() - 1){
+                    enableBetButton();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        animator.start();
+    }
+
+
+    private void hideSecondCard() {
+        dealerCard.get(1).setVisibility(View.VISIBLE);
+        dealerCard.get(1).setBackgroundResource(R.drawable.back);
+        dealerText1.get(1).setVisibility(View.INVISIBLE);
+        dealerText2.get(1).setVisibility(View.INVISIBLE);
+        dealerImages.get(1).setVisibility(View.INVISIBLE);
     }
 
     private void enable(AppCompatButton button) {
@@ -182,37 +329,130 @@ public class MainActivity extends AppCompatActivity {
         button.setBackgroundResource(R.drawable.button_disabled);
     }
 
-    private void clearAll(){
-        //Clear cards
-        pc1.setImageResource(0);
-        pc2.setImageResource(0);
-        pc3.setImageResource(0);
-        pc4.setImageResource(0);
-        pc5.setImageResource(0);
-        pc6.setImageResource(0);
-
-        dc1.setImageResource(0);
-        dc2.setImageResource(0);
-        dc3.setImageResource(0);
-        dc4.setImageResource(0);
-        dc5.setImageResource(0);
-        dc6.setImageResource(0);
-
+    private void init(){
         //clear Hands
         game.getPlayer().setHand(new Hand());
         game.getDealer().setHand(new Hand());
+
+        //Hide card's layouts
+        for (ConstraintLayout card : playerCard){
+            card.setVisibility(View.INVISIBLE);
+        }
+        for (ConstraintLayout card : dealerCard){
+            card.setVisibility(View.INVISIBLE);
+        }
+
+        //Uncolor the values
+        dealerValue.setTextColor(Color.WHITE);
+        playerValue.setTextColor(Color.WHITE);
+
+        //Hide and uncolor the result
+        result.setVisibility(View.INVISIBLE);
+        result.setTextColor(Color.WHITE);
+
+        //Disable buttons
+        disable(hitButton);
+        disable(standButton);
+        disable(doubleButton);
+
+        //Actualize balance
+        game.getPlayer().setStand(false);
+        game.getDealer().setStand(false);
+        game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
+        game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
+        balance.setText(Double.toString(game.getPlayer().getBalance()));
+    }
+
+    private void loadLayoutElements() {
+        //Buttons
+        hitButton = findViewById(R.id.hitButton);
+        standButton = findViewById(R.id.standButton);
+        doubleButton = findViewById(R.id.doubleButton);
+        betButton = findViewById(R.id.betButton);
+        halfBet = findViewById(R.id.halfBet);
+        doubleBet = findViewById(R.id.doubleBet);
+
+        //TextView
+        balance = findViewById(R.id.balance);
+        playerValue = findViewById(R.id.playerValue);
+        dealerValue = findViewById(R.id.dealerValue);
+        result = findViewById(R.id.result);
+
+        //Bet (EditText)
+        bet = findViewById(R.id.bet);
+
+        //Stack cards
+        distributableCard = findViewById(R.id.distributableCard);
+        distributableCard2 = findViewById(R.id.distributableCard2);
+        stack = findViewById(R.id.stack);
+
+        //Cards
+        //Player cards layouts
+        playerCard.add(findViewById(R.id.player_card_1));
+        playerCard.add(findViewById(R.id.player_card_2));
+        playerCard.add(findViewById(R.id.player_card_3));
+        playerCard.add(findViewById(R.id.player_card_4));
+        playerCard.add(findViewById(R.id.player_card_5));
+        playerCard.add(findViewById(R.id.player_card_6));
+        playerCard.add(findViewById(R.id.player_card_7));
+
+        //Dealer cards layouts
+        dealerCard.add(findViewById(R.id.dealer_card_1));
+        dealerCard.add(findViewById(R.id.dealer_card_2));
+        dealerCard.add(findViewById(R.id.dealer_card_3));
+        dealerCard.add(findViewById(R.id.dealer_card_4));
+        dealerCard.add(findViewById(R.id.dealer_card_5));
+        dealerCard.add(findViewById(R.id.dealer_card_6));
+        dealerCard.add(findViewById(R.id.dealer_card_7));
+
+        //Player cards Text (values)
+        playerText1.add(findViewById(R.id.player_text1_1));
+        playerText2.add(findViewById(R.id.player_text1_2));
+        playerText1.add(findViewById(R.id.player_text2_1));
+        playerText2.add(findViewById(R.id.player_text2_2));
+        playerText1.add(findViewById(R.id.player_text3_1));
+        playerText2.add(findViewById(R.id.player_text3_2));
+        playerText1.add(findViewById(R.id.player_text4_1));
+        playerText2.add(findViewById(R.id.player_text4_2));
+        playerText1.add(findViewById(R.id.player_text5_1));
+        playerText2.add(findViewById(R.id.player_text5_2));
+        playerText1.add(findViewById(R.id.player_text6_1));
+        playerText2.add(findViewById(R.id.player_text6_2));
+        playerText1.add(findViewById(R.id.player_text7_1));
+        playerText2.add(findViewById(R.id.player_text7_2));
+
+        //Dealer cards Text (values)
+        dealerText1.add(findViewById(R.id.dealer_text1_1));
+        dealerText2.add(findViewById(R.id.dealer_text1_2));
+        dealerText1.add(findViewById(R.id.dealer_text2_1));
+        dealerText2.add(findViewById(R.id.dealer_text2_2));
+        dealerText1.add(findViewById(R.id.dealer_text3_1));
+        dealerText2.add(findViewById(R.id.dealer_text3_2));
+        dealerText1.add(findViewById(R.id.dealer_text4_1));
+        dealerText2.add(findViewById(R.id.dealer_text4_2));
+        dealerText1.add(findViewById(R.id.dealer_text5_1));
+        dealerText2.add(findViewById(R.id.dealer_text5_2));
+        dealerText1.add(findViewById(R.id.dealer_text6_1));
+        dealerText2.add(findViewById(R.id.dealer_text6_2));
+        dealerText1.add(findViewById(R.id.dealer_text7_1));
+        dealerText2.add(findViewById(R.id.dealer_text7_2));
+
+        //Player cards image (color)
+        playerImages.add(findViewById(R.id.player_card_1_image));
+        playerImages.add(findViewById(R.id.player_card_2_image));
+        playerImages.add(findViewById(R.id.player_card_3_image));
+        playerImages.add(findViewById(R.id.player_card_4_image));
+        playerImages.add(findViewById(R.id.player_card_5_image));
+        playerImages.add(findViewById(R.id.player_card_6_image));
+        playerImages.add(findViewById(R.id.player_card_7_image));
+
+        //Dealer cards Image (color)
+        dealerImages.add(findViewById(R.id.dealer_card_image_1));
+        dealerImages.add(findViewById(R.id.dealer_card_image_2));
+        dealerImages.add(findViewById(R.id.dealer_card_image_3));
+        dealerImages.add(findViewById(R.id.dealer_card_image_4));
+        dealerImages.add(findViewById(R.id.dealer_card_image_5));
+        dealerImages.add(findViewById(R.id.dealer_card_image_6));
+        dealerImages.add(findViewById(R.id.dealer_card_image_7));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

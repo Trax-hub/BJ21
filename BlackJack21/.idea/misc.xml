@@ -17,15 +17,21 @@
         <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/card_layout.xml" value="0.30052083333333335" />
         <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/card_list_adapter.xml" value="0.30052083333333335" />
         <entry key="..\:/Users/Pablo/AndroidStudioProjects/BlackJack21/app/src/main/res/layout/content_main.xml" value="0.2953703703703704" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/balance_ackground.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/balance_background.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/bet_button.xml" value="0.1734375" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/button_disabled.xml" value="0.31666666666666665" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/button_enabled.xml" value="0.31666666666666665" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/card.xml" value="0.1734375" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/drawable/stack_item.xml" value="0.31666666666666665" />
-        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/activity_main.xml" value="0.5" />
-        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/activity_test.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/activity_test.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/card_layout.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/login_activity.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/portal.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/signup_activity.xml" value="0.30052083333333335" />
         <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/stack_item.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Pablo/git/BlackJack21/app/src/main/res/layout/training_mode.xml" value="0.30052083333333335" />
       </map>
     </option>
   </component>

@@ -1,5 +1,7 @@
 package com.example.blackjack21;
 
+import java.util.ArrayList;
+
 public class Game {
     private Player player;
     private Dealer dealer;
@@ -20,56 +22,47 @@ public class Game {
         return this.dealer;
     }
 
-    public CardStack getStack(){
-        return this.stack;
-    }
+    public CardStack getStack(){ return this.stack;}
 
+    public ArrayList<Card> getPlayerCardList(){ return this.player.getHand().getcardList(); }
 
-    public void hit(Player player){
-        if(!player.isStand() && !player.getHand().isBusted()) {
-            player.getHand().add(stack.getRandomCard());
-        }
-        if(player.getHand().isBusted()){
-            stand(this.player);
-        }
-    }
-
-    public void stand(Player player){
-        player.setStand(true);
-        dealer.play(stack);
-        result();
-    }
-
-    public void dobble(Player player){
-        player.getHand().add(stack.getRandomCard());
-        player.setStand(true);
-    }
-
-    public void split(Player player){
-        //TODO
-    }
-
-    public void distribute(){
-        //Give 2 random cards from the stack to the Dealer
-        this.dealer.getHand().add(this.getStack().getRandomCard());
-        this.dealer.getHand().add(this.getStack().getRandomCard());
-
-        //Give 2 random cards from the stack to the Player
-        this.player.getHand().add(this.getStack().getRandomCard());
-        this.player.getHand().add(this.getStack().getRandomCard());
-    }
+    public ArrayList<Card> getDealerCardList(){ return this.dealer.getHand().getcardList(); }
 
     public void result(){
-        if(player.getHand().getValue() == 21 && player.getHand().getcardList().size() == 2){
-            player.setBalance(player.getBalance() + (2.5 * player.getBet()));
+        //If the player got a BlackJack
+        if((this.player.getHand().getValue() == 21 && this.player.getHand().getcardList().size() == 2)
+        && !(this.dealer.getHand().getValue() == 21 && this.dealer.getHand().getcardList().size() == 2)){
+            this.player.setLastWin(2.5 * this.player.getBet());
+            this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+            return;
         }
-        if(!player.getHand().isBusted() && !dealer.getHand().isBusted()){
-            if(player.getHand().getValue() > player.getHand().getValue()){
-                player.setBalance(player.getBalance() + (2 * player.getBet()));
+
+        if(!this.player.getHand().isBusted() && !this.dealer.getHand().isBusted()){
+            if(this.player.getHand().getValue() > this.dealer.getHand().getValue()) {
+                this.player.setLastWin(2 * this.player.getBet());
+                this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+                return;
             }
-            if(player.getHand().getValue() == player.getHand().getValue()){
-                player.setBalance(player.getBalance() + player.getBet());
+            if(this.player.getHand().getValue() == this.dealer.getHand().getValue()){
+                this.player.setLastWin(this.player.getBet());
+                this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+                return;
+            }else{
+                this.player.setLastWin(0);
+                this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+                return;
             }
+
+        }
+
+        if(this.dealer.getHand().isBusted() && !this.player.getHand().isBusted()){
+            this.player.setLastWin(this.player.getBet() * 2.);
+            this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+            return;
+        }else if (!this.dealer.getHand().isBusted() && this.player.getHand().isBusted()){
+            this.player.setLastWin(0);
+            this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+            return;
         }
     }
 

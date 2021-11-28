@@ -24,43 +24,12 @@
             android:layout_marginTop="32dp"
             android:layout_marginHorizontal="16dp"
             android:background="@color/background1"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/balance_background"
-                android:padding="4dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_x="16dp"
-                android:layout_y="180dp">
 
-                <ImageView
-                    android:id="@+id/stackIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:srcCompat="@drawable/stack" />
-
-                <TextView
-                    android:id="@+id/balance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_x="152dp"
-                android:layout_y="200dp"
-                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/dealerValue"
@@ -814,54 +783,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:background="@color/background2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/betButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/bet"
-                    android:layout_width="128dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="32dp"
-                    android:background="@drawable/bet_edit_text"
-                    android:elevation="5dp"
-                    android:inputType="numberDecimal"
-                    android:padding="8dp"
-                    android:text="@string/bet"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/appCompatButton"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/halfBet"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginRight="1dp"
-                    android:background="@color/background3"
-                    android:text="1/2"
-                    android:textSize="16sp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/doubleBet"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@color/background3"
-                    android:text="2x"
-                    android:textSize="16sp" />
-
-
-            </LinearLayout>
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/betButton"
                 android:layout_width="wrap_content"
@@ -872,7 +793,7 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
             </androidx.appcompat.widget.AppCompatButton>

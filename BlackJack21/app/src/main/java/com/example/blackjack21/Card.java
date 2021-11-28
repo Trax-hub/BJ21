@@ -13,7 +13,6 @@ public class Card {
     private int value;
 
     public Card(int nb, String color){
-        super();
         this.nb = nb;
         this.color = color;
         processValue();
@@ -29,10 +28,6 @@ public class Card {
 
     public int getNb(){
         return this.nb;
-    }
-
-    public void setNb(int nb){
-        this.nb = nb;
     }
 
     public String getName(){

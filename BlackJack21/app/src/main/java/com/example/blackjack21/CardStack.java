@@ -8,7 +8,6 @@ public class CardStack {
     private List cardList;
 
     public CardStack(){
-        super();
         this.cardList = new ArrayList<Card>();
         addAllTheCards();
     }
