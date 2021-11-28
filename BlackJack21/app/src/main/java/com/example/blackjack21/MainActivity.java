@@ -3,19 +3,32 @@ package com.example.blackjack21;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -27,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     ImageView distributableCard, distributableCard2, stack;
 
     Game game = new Game();
+
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    DatabaseReference mDatabase;
+
 
     //Lists who stocks card images/texts and cards themselves
     ArrayList<TextView> playerText1 = new ArrayList<>();
@@ -44,6 +62,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDatabase = FirebaseDatabase.getInstance("https://black-jack-21-ede5c-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+
+        if(firebaseUser == null){
+            startActivity(new Intent(this, PortalActivity.class));
+            finish();
+        }
+
+        mDatabase.child("Users").child(firebaseUser.getUid()).child("balance").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting balance", task.getException());
+            }
+            else {
+                Log.d("balance", String.valueOf(task.getResult().getValue()));
+                game.getPlayer().setBalance(Double.parseDouble(Long.toString( (Long) task.getResult().getValue())));
+                balance.setText(Double.toString(game.getPlayer().getBalance()));
+
+            }
+        });
+
         loadLayoutElements();
         init();
 
@@ -168,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         balance.setText(Double.toString(game.getPlayer().getBalance()));
+        mDatabase.child("Users/" + firebaseUser.getUid() + "/balance").setValue(game.getPlayer().getBalance());
+
         disable(hitButton);
         disable(doubleButton);
         disable(standButton);
