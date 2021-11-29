@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,9 +14,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,14 +33,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     AppCompatButton hitButton, standButton, doubleButton, betButton, halfBet, doubleBet;
     EditText bet;
     TextView balance, playerValue, dealerValue, result;
-    ImageView distributableCard, distributableCard2, stack;
+    ImageView distributableCard, distributableCard2, stack, claimMoney;
 
     Game game = new Game();
 
@@ -56,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ConstraintLayout> dealerCard = new ArrayList<>();
     ArrayList<ConstraintLayout> playerCard = new ArrayList<>();
 
+    Date rewardDate;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,12 +79,13 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-
+        //Verifying if the user is connected
         if(firebaseUser == null){
             startActivity(new Intent(this, PortalActivity.class));
             finish();
         }
 
+        //Sync the Balance with the database
         mDatabase.child("Users").child(firebaseUser.getUid()).child("balance").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting balance", task.getException());
@@ -81,12 +94,34 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("balance", String.valueOf(task.getResult().getValue()));
                 game.getPlayer().setBalance(Double.parseDouble(Long.toString( (Long) task.getResult().getValue())));
                 balance.setText(Double.toString(game.getPlayer().getBalance()));
-
             }
         });
 
+
         loadLayoutElements();
         init();
+
+        //Daily reward
+        claimMoney.setOnClickListener(v -> {
+            mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").get().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting rewardTime", task.getException());
+                }
+                else {
+                    Log.d("Reward time loaded", String.valueOf(task.getResult().getValue()));
+                    Long nextClaim = task.getResult().getValue(Long.class);
+                    Long actualTime = Calendar.getInstance().getTimeInMillis();
+                        if(nextClaim <= actualTime){
+                            Toast.makeText(this,"1000 $ claimed !", Toast.LENGTH_SHORT).show();
+                            game.getPlayer().setBalance(game.getPlayer().getBalance() + 1000);
+                            balance.setText(Double.toString(game.getPlayer().getBalance()));
+                            mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").setValue(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000);
+                        }else{
+                            Toast.makeText(this,"Wait " + ((nextClaim - actualTime) / 1000 /60) + " min", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            });
+        });
 
         betButton.setOnClickListener(v -> {
             try {
@@ -497,5 +532,8 @@ public class MainActivity extends AppCompatActivity {
         dealerImages.add(findViewById(R.id.dealer_card_image_5));
         dealerImages.add(findViewById(R.id.dealer_card_image_6));
         dealerImages.add(findViewById(R.id.dealer_card_image_7));
+
+        //Daily Reward
+        claimMoney = findViewById(R.id.claimMoney);
     }
 }
