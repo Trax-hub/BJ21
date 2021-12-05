@@ -3,18 +3,13 @@ package com.example.blackjack21;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,7 +19,6 @@ import java.util.Objects;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText pseudo, mail, password;
-    private Button button;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -37,7 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
         mail = findViewById(R.id.mail);
         password =findViewById(R.id.password);
         pseudo = findViewById(R.id.pseudo);
-        button = findViewById(R.id.signupButton);
+        Button button = findViewById(R.id.signupButton);
 
         button.setOnClickListener(view -> registerUser());
 
@@ -90,8 +84,9 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        assert firebaseUser != null;
                         String uid = firebaseUser.getUid();
-                        User user = new User(pseudoS, mailS, uid);
+                        User user = new User(pseudoS, mailS, uid, 1000., 0L);
 
                         FirebaseDatabase.getInstance("https://black-jack-21-ede5c-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
                                 .child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())

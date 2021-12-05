@@ -16,30 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ConstraintLayout> dealerCard = new ArrayList<>();
     ArrayList<ConstraintLayout> playerCard = new ArrayList<>();
 
-    Date rewardDate;
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -85,43 +73,31 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        //Sync the Balance with the database
-        mDatabase.child("Users").child(firebaseUser.getUid()).child("balance").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting balance", task.getException());
-            }
-            else {
-                Log.d("balance", String.valueOf(task.getResult().getValue()));
-                game.getPlayer().setBalance(Double.parseDouble(Long.toString( (Long) task.getResult().getValue())));
-                balance.setText(Double.toString(game.getPlayer().getBalance()));
-            }
-        });
-
-
         loadLayoutElements();
         init();
 
         //Daily reward
-        claimMoney.setOnClickListener(v -> {
-            mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").get().addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting rewardTime", task.getException());
-                }
-                else {
-                    Log.d("Reward time loaded", String.valueOf(task.getResult().getValue()));
-                    Long nextClaim = task.getResult().getValue(Long.class);
-                    Long actualTime = Calendar.getInstance().getTimeInMillis();
-                        if(nextClaim <= actualTime){
-                            Toast.makeText(this,"1000 $ claimed !", Toast.LENGTH_SHORT).show();
-                            game.getPlayer().setBalance(game.getPlayer().getBalance() + 1000);
-                            balance.setText(Double.toString(game.getPlayer().getBalance()));
-                            mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").setValue(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000);
-                        }else{
-                            Toast.makeText(this,"Wait " + ((nextClaim - actualTime) / 1000 /60) + " min", Toast.LENGTH_SHORT).show();
-                        }
+        claimMoney.setOnClickListener(v -> mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting rewardTime", task.getException());
+            }
+            else {
+                Log.d("Reward time loaded", String.valueOf(Objects.requireNonNull(task.getResult()).getValue()));
+                Long nextClaim = task.getResult().getValue(Long.class);
+                Long actualTime = Calendar.getInstance().getTimeInMillis();
+                if (nextClaim != null) {
+                    if (nextClaim <= actualTime) {
+                        Toast.makeText(this, "1000 $ claimed !", Toast.LENGTH_SHORT).show();
+                        game.getPlayer().setBalance(game.getPlayer().getBalance() + 1000);
+                        updateBalance();
+                        refreshBalance();
+                        mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").setValue(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000);
+                    } else {
+                        Toast.makeText(this, "Wait " + ((nextClaim - actualTime) / 1000 / 60) + " min", Toast.LENGTH_SHORT).show();
                     }
-            });
-        });
+                }
+            }
+        }));
 
         betButton.setOnClickListener(v -> {
             try {
@@ -131,17 +107,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        hitButton.setOnClickListener(v -> {
-            hit();
-        });
+        hitButton.setOnClickListener(v -> hit());
 
-        standButton.setOnClickListener(v -> {
-            stand();
-        });
+        standButton.setOnClickListener(v -> stand());
 
-        doubleButton.setOnClickListener(v -> {
-            dobble();
-        });
+        doubleButton.setOnClickListener(v -> dobble());
 
         halfBet.setOnClickListener(v -> {
             if ((TextUtils.isEmpty(bet.getText().toString()) || Double.parseDouble(bet.getText().toString()) <= 0.)) {
@@ -156,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 bet.setError("Bet must be over 0");
             } else {
                 if(Double.parseDouble(bet.getText().toString()) * 2 > game.getPlayer().getBalance()){
-                    System.out.println("here");
                     bet.setText(Double.toString(game.getPlayer().getBalance()));
                 }else {
                     bet.setText(Double.toString(Double.parseDouble(bet.getText().toString()) * 2));
@@ -164,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
     private void bet() throws InterruptedException {
         if((TextUtils.isEmpty(bet.getText().toString()) || Double.parseDouble(bet.getText().toString()) <= 0.)) {
             bet.setError("Bet must be over 0");
@@ -174,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        placeBet();
         init();
 
         disable(hitButton);
@@ -184,10 +158,19 @@ public class MainActivity extends AppCompatActivity {
         firstDraw();
     }
 
+    private void placeBet() {
+        game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
+        game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
+        updateBalance();
+        refreshBalance();
+    }
+
+    @SuppressLint("SetTextI18n")
     public void dobble(){
         game.getPlayer().dobble(game.getStack());
         playerAnimation(game.getPlayer().getHand().getcardList().size() - 1);
         balance.setText(Double.toString(game.getPlayer().getBalance()));
+        mDatabase.child("Users/" + firebaseUser.getUid() + "/balance").setValue(game.getPlayer().getBalance());
         stand();
     }
 
@@ -257,22 +240,6 @@ public class MainActivity extends AppCompatActivity {
         betButton.setEnabled(true);
     }
 
-    private void firstDraw() {
-        game.getPlayer().pick(game.getStack());
-        game.getPlayer().pick(game.getStack());
-        game.getDealer().pick(game.getStack());
-        dealerValue.setText(Integer.toString(game.getDealer().getHand().getValue()));
-        game.getDealer().pick(game.getStack());
-
-        if((game.getPlayer().getHand().getValue() == 21 && game.getPlayer().getHand().getcardList().size() == 2)
-                && !(game.getDealer().getHand().getValue() == 21 && game.getDealer().getHand().getcardList().size() == 2)){
-            stand();
-        }
-
-        playerAnimation(0);
-        dealerAnimation(0);
-    }
-
     private void loadPlayerCard(Card card, int i){
         playerText1.get(i).setText(card.getName());
         playerText2.get(i).setText(card.getName());
@@ -286,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadDealerCard(Card card, int i){
+    private void loadDealerCard(Card card, int i) {
         dealerText1.get(1).setVisibility(View.VISIBLE);
         dealerText2.get(1).setVisibility(View.VISIBLE);
         dealerImages.get(1).setVisibility(View.VISIBLE);
@@ -294,98 +261,14 @@ public class MainActivity extends AppCompatActivity {
         dealerText1.get(i).setText(card.getName());
         dealerText2.get(i).setText(card.getName());
         dealerImages.get(i).setImageResource(getResources().getIdentifier(card.getColor(), "drawable", getPackageName()));
-        if(card.getColor().equals("h") || card.getColor().equals("d")){
+        if (card.getColor().equals("h") || card.getColor().equals("d")) {
             dealerText1.get(i).setTextColor(Color.RED);
             dealerText2.get(i).setTextColor(Color.RED);
-        }else{
+        } else {
             dealerText1.get(i).setTextColor(Color.BLACK);
             dealerText2.get(i).setTextColor(Color.BLACK);
         }
     }
-
-    private void playerAnimation(int numero) {
-        distributableCard.setVisibility(View.VISIBLE);
-        distributableCard.bringToFront();
-        Path path = new Path();
-        path.lineTo(playerCard.get(numero).getX(), playerCard.get(numero).getY());
-        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard, View.X, View.Y, path);
-        animator.setDuration(500);
-        animator.addListener(new Animator.AnimatorListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                distributableCard.setVisibility(View.INVISIBLE);
-                playerCard.get(numero).setVisibility(View.VISIBLE);
-                loadPlayerCard(game.getPlayerCardList().get(numero), numero);
-                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
-
-                if(numero < game.getPlayer().getHand().getcardList().size() - 1){
-                    playerAnimation(numero + 1);
-                }
-
-                if(numero >= 1){
-                    enable(standButton);
-                    enable(hitButton);
-                }
-
-            }
-            @Override
-            public void onAnimationCancel(Animator animation) { }
-            @Override
-            public void onAnimationRepeat(Animator animation) { }
-            @Override
-            public void onAnimationStart(Animator animation) { }
-        });
-        animator.start();
-    }
-
-    private void dealerAnimation(int numero) {
-        distributableCard2.setVisibility(View.VISIBLE);
-        distributableCard2.bringToFront();
-        Path path = new Path();
-        path.lineTo(dealerCard.get(numero).getX(), dealerCard.get(numero).getY());
-        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard2, View.X, View.Y, path);
-        animator.setDuration(500);
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                distributableCard2.setVisibility(View.INVISIBLE);
-                dealerCard.get(numero).setVisibility(View.VISIBLE);
-                if(numero == 1){
-                    hideSecondCard();
-                }else {
-                    loadDealerCard(game.getDealerCardList().get(1), 1);
-                    loadDealerCard(game.getDealerCardList().get(numero), numero);
-                    enable(standButton);
-                    enable(hitButton);
-                    enable(doubleButton);
-                }
-                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
-
-                if(numero < game.getDealer().getHand().getcardList().size() - 1){
-                    dealerAnimation(numero + 1);
-                }
-
-                if(game.getPlayer().isStand() && numero == game.getDealer().getHand().getcardList().size() - 1){
-                    enableBetButton();
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-        animator.start();
-    }
-
 
     private void hideSecondCard() {
         dealerCard.get(1).setVisibility(View.VISIBLE);
@@ -393,6 +276,26 @@ public class MainActivity extends AppCompatActivity {
         dealerText1.get(1).setVisibility(View.INVISIBLE);
         dealerText2.get(1).setVisibility(View.INVISIBLE);
         dealerImages.get(1).setVisibility(View.INVISIBLE);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void refreshBalance() {
+        mDatabase.child("Users").child(firebaseUser.getUid()).child("balance").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting balance", task.getException());
+            }
+            else {
+                Log.d("balance", String.valueOf(Objects.requireNonNull(task.getResult()).getValue()));
+                if(task.getResult().getValue() != null) {
+                    game.getPlayer().setBalance(Double.parseDouble(Long.toString((Long) task.getResult().getValue())));
+                    balance.setText(Double.toString(game.getPlayer().getBalance()));
+                }
+            }
+        });
+    }
+
+    private void updateBalance(){
+        mDatabase.child("Users/" + firebaseUser.getUid() + "/balance").setValue(game.getPlayer().getBalance());
     }
 
     private void enable(AppCompatButton button) {
@@ -428,17 +331,27 @@ public class MainActivity extends AppCompatActivity {
         result.setVisibility(View.INVISIBLE);
         result.setTextColor(Color.WHITE);
 
-        //Disable buttons
-        disable(hitButton);
-        disable(standButton);
-        disable(doubleButton);
-
         //Actualize balance
         game.getPlayer().setStand(false);
         game.getDealer().setStand(false);
-        game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
-        game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
-        balance.setText(Double.toString(game.getPlayer().getBalance()));
+        refreshBalance();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void firstDraw() {
+        game.getPlayer().pick(game.getStack());
+        game.getPlayer().pick(game.getStack());
+        game.getDealer().pick(game.getStack());
+        dealerValue.setText(Integer.toString(game.getDealer().getHand().getValue()));
+        game.getDealer().pick(game.getStack());
+
+        if((game.getPlayer().getHand().getValue() == 21 && game.getPlayer().getHand().getcardList().size() == 2)
+                && !(game.getDealer().getHand().getValue() == 21 && game.getDealer().getHand().getcardList().size() == 2)){
+            stand();
+        }
+
+        playerAnimation(0);
+        dealerAnimation(0);
     }
 
     private void loadLayoutElements() {
@@ -535,5 +448,90 @@ public class MainActivity extends AppCompatActivity {
 
         //Daily Reward
         claimMoney = findViewById(R.id.claimMoney);
+    }
+
+    private void playerAnimation(int numero) {
+        distributableCard.setVisibility(View.VISIBLE);
+        distributableCard.bringToFront();
+        Path path = new Path();
+        path.lineTo(playerCard.get(numero).getX(), playerCard.get(numero).getY());
+        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard, View.X, View.Y, path);
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                distributableCard.setVisibility(View.INVISIBLE);
+                playerCard.get(numero).setVisibility(View.VISIBLE);
+                loadPlayerCard(game.getPlayerCardList().get(numero), numero);
+                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+
+                if(numero < game.getPlayer().getHand().getcardList().size() - 1){
+                    playerAnimation(numero + 1);
+                }
+
+                if(numero >= 1){
+                    enable(standButton);
+                    enable(hitButton);
+                }
+
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) { }
+            @Override
+            public void onAnimationRepeat(Animator animation) { }
+            @Override
+            public void onAnimationStart(Animator animation) { }
+        });
+        animator.start();
+    }
+
+    private void dealerAnimation(int numero) {
+        distributableCard2.setVisibility(View.VISIBLE);
+        distributableCard2.bringToFront();
+        Path path = new Path();
+        path.lineTo(dealerCard.get(numero).getX(), dealerCard.get(numero).getY());
+        ObjectAnimator animator = ObjectAnimator.ofFloat(distributableCard2, View.X, View.Y, path);
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                distributableCard2.setVisibility(View.INVISIBLE);
+                dealerCard.get(numero).setVisibility(View.VISIBLE);
+                if(numero == 1){
+                    hideSecondCard();
+                }else {
+                    loadDealerCard(game.getDealerCardList().get(1), 1);
+                    loadDealerCard(game.getDealerCardList().get(numero), numero);
+                    enable(standButton);
+                    enable(hitButton);
+                    if(game.getPlayer().getBalance() >= game.getPlayer().getBet())
+                        enable(doubleButton);
+                }
+                playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
+
+                if(numero < game.getDealer().getHand().getcardList().size() - 1){
+                    dealerAnimation(numero + 1);
+                }
+
+                if(game.getPlayer().isStand() && numero == game.getDealer().getHand().getcardList().size() - 1){
+                    enableBetButton();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        animator.start();
     }
 }

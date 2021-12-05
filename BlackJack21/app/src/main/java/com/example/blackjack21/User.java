@@ -8,19 +8,18 @@ import java.util.Date;
 
 public class User implements Serializable {
 
-    private String pseudo, mail;
-    private String uid;
+    private String pseudo, mail, uid;
     private Double balance;
-    private Long rewardDate;
+    private Long rewardTime;
 
-
-    public User(String pseudo, String mail, String uid) {
+    public User(String pseudo, String mail, String uid, Double balance, Long rewardDate) {
         this.mail = mail;
         this.pseudo = pseudo;
         this.uid = uid;
-        this.balance = 1000.;
-        this.rewardDate = Calendar.getInstance().getTimeInMillis();
+        this.balance = balance;
+        this.rewardTime = rewardDate;
     }
+
 
     public String getPseudo() {
         return pseudo;
@@ -36,6 +35,6 @@ public class User implements Serializable {
 
     public Double getBalance() { return balance;}
 
-    public Long getRewardTime() { return rewardDate;}
+    public Long getRewardTime() { return rewardTime;}
 
 }

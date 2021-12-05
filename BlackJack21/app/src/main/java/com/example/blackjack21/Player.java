@@ -10,7 +10,7 @@ public class Player{
     public Player(){
         this.hand = new Hand();
         this.isStand = false;
-        this.balance = 100;
+        this.balance = 0;
         this.bet = 0;
     }
 
