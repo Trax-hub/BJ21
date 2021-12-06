@@ -67,6 +67,8 @@ public class RealGameActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
+        refreshBalance();
+
         //Verifying if the user is connected
         if(firebaseUser == null){
             startActivity(new Intent(this, PortalActivity.class));
@@ -150,9 +152,10 @@ public class RealGameActivity extends AppCompatActivity {
             bet.setError("Not enough money");
             return;
         }
-
         placeBet();
         init();
+        updateBalance();
+        refreshBalance();
 
         disable(hitButton);
         disable(standButton);
@@ -165,16 +168,12 @@ public class RealGameActivity extends AppCompatActivity {
     private void placeBet() {
         game.getPlayer().setBet(Double.parseDouble(bet.getText().toString()));
         game.getPlayer().setBalance(game.getPlayer().getBalance() - game.getPlayer().getBet());
-        updateBalance();
-        refreshBalance();
     }
 
     @SuppressLint("SetTextI18n")
     public void dobble(){
         game.getPlayer().dobble(game.getStack());
         playerAnimation(game.getPlayer().getHand().getcardList().size() - 1);
-        balance.setText(Double.toString(game.getPlayer().getBalance()));
-        mDatabase.child("Users/" + firebaseUser.getUid() + "/balance").setValue(game.getPlayer().getBalance());
         stand();
     }
 
@@ -230,9 +229,8 @@ public class RealGameActivity extends AppCompatActivity {
             result.setText("Draw");
         }
 
-        balance.setText(Double.toString(game.getPlayer().getBalance()));
-        mDatabase.child("Users/" + firebaseUser.getUid() + "/balance").setValue(game.getPlayer().getBalance());
-
+        updateBalance();
+        refreshBalance();
         disable(hitButton);
         disable(doubleButton);
         disable(standButton);
@@ -338,7 +336,6 @@ public class RealGameActivity extends AppCompatActivity {
         //Actualize balance
         game.getPlayer().setStand(false);
         game.getDealer().setStand(false);
-        refreshBalance();
     }
 
     @SuppressLint("SetTextI18n")
