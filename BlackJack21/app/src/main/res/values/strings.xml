@@ -27,4 +27,6 @@
     <string name="icclaim">Money Claimer ico</string>
     <string name="betHint">Bet</string>
     <string name="iclogout">Log out icon</string>
+    <string name="iut">Logo of the IUT</string>
+    <string name="author">Pablo FOUCHER</string>
 </resources>
