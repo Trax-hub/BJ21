@@ -35,10 +35,11 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="32dp"
             android:background="@color/background1"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Deprecated">
 
             <ImageView
                 android:id="@+id/score"
@@ -48,7 +49,8 @@
                 android:layout_y="17dp"
                 android:background="@drawable/secondary_button"
                 android:padding="4dp"
-                android:src="@drawable/ic_score" />
+                android:src="@drawable/ic_score"
+                android:contentDescription="@string/icscore"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -64,7 +66,8 @@
                     android:id="@+id/stackIcon"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:srcCompat="@drawable/stack" />
+                    app:srcCompat="@drawable/stack"
+                    android:contentDescription="@string/stand"/>
 
                 <TextView
                     android:id="@+id/balance"
@@ -82,7 +85,8 @@
                 android:layout_y="348dp"
                 android:background="@drawable/button_enabled"
                 android:padding="4dp"
-                android:src="@drawable/ic_money" />
+                android:src="@drawable/ic_money"
+                android:contentDescription="@string/icclaim"/>
 
             <TextView
                 android:id="@+id/result"
@@ -114,8 +118,8 @@
                     android:id="@+id/dealer_card_image_1"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,8 +166,8 @@
                     android:id="@+id/dealer_card_image_2"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -210,8 +214,8 @@
                     android:id="@+id/dealer_card_image_3"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -258,8 +262,8 @@
                     android:id="@+id/dealer_card_image_4"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -306,8 +310,8 @@
                     android:id="@+id/dealer_card_image_5"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -354,8 +358,8 @@
                     android:id="@+id/dealer_card_image_6"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -402,8 +406,8 @@
                     android:id="@+id/dealer_card_image_7"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -414,7 +418,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
-                    android:layout_marginBottom="75dp
+                    android:layout_marginBottom="75dp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -451,8 +455,8 @@
                     android:id="@+id/player_card_1_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -499,8 +503,8 @@
                     android:id="@+id/player_card_2_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -547,8 +551,8 @@
                     android:id="@+id/player_card_3_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -595,8 +599,8 @@
                     android:id="@+id/player_card_4_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -643,8 +647,8 @@
                     android:id="@+id/player_card_5_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -691,8 +695,8 @@
                     android:id="@+id/player_card_6_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -739,8 +743,8 @@
                     android:id="@+id/player_card_7_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/c"
                     android:contentDescription="@string/descCard"
+                    android:src="@drawable/c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -783,29 +787,29 @@
 
             <ImageView
                 android:id="@+id/stack"
-                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
                 android:layout_y="0dp"
+                android:contentDescription="@string/stack"
                 android:src="@drawable/back" />
 
             <ImageView
                 android:id="@+id/distributableCard"
-                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
                 android:layout_y="0dp"
+                android:contentDescription="@string/stack"
                 android:src="@drawable/back" />
 
             <ImageView
                 android:id="@+id/distributableCard2"
-                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
                 android:layout_y="0dp"
+                android:contentDescription="@string/stack"
                 android:src="@drawable/back" />
 
 
@@ -851,8 +855,10 @@
                     android:background="@drawable/bet_edit_text"
                     android:elevation="5dp"
                     android:inputType="numberDecimal"
+                    android:autofillHints="none"
                     android:padding="8dp"
                     android:text="@string/bet"
+                    android:hint="@string/betHint"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="16sp"
@@ -865,7 +871,7 @@
                     android:id="@+id/halfBet"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginRight="1dp"
+                    android:layout_marginEnd="1dp"
                     android:background="@color/background3"
                     android:text="@string/half"
                     android:textSize="16sp" />
@@ -917,14 +923,15 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/button_enabled"
-                android:drawableRight="@drawable/ic_hit"
+                android:drawableEnd="@drawable/ic_hit"
                 android:drawableTint="@color/purple"
-                android:paddingRight="18dp"
+                android:paddingEnd="18dp"
                 android:text="@string/hit"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/standButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry,TooManyViews" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/standButton"
@@ -935,15 +942,16 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/button_enabled"
-                android:drawableRight="@drawable/ic_add"
+                android:drawableEnd="@drawable/ic_add"
                 android:drawableTint="@color/orange"
-                android:paddingRight="12dp"
+                android:paddingEnd="12dp"
                 android:text="@string/stand"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/doubleButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/hitButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/doubleButton"

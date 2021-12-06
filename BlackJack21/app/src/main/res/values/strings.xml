@@ -12,7 +12,7 @@
     <string name="icTM">Training mode icon</string>
     <string name="icRules">Rules/Help icon</string>
     <string name="signup">Sign Up</string>
-    <string name="half"><![CDATA[&#189;]]></string>
+    <string name="half">1/2</string>
     <string name="twox">2x</string>
     <string name="hit">Hit</string>
     <string name="stand">Stand</string>
@@ -23,4 +23,8 @@
     <string name="pseudo">Pseudo</string>
     <string name="descCard">Color of the card</string>
     <string name="stack">Stack</string>
+    <string name="icscore">ScoreBoard icon</string>
+    <string name="icclaim">Money Claimer ico</string>
+    <string name="betHint">Bet</string>
+    <string name="iclogout">Log out icon</string>
 </resources>

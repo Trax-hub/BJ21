@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView real, training, rules;
+    ImageView real, training, rules, logout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,14 +22,19 @@ public class MenuActivity extends AppCompatActivity {
         real = findViewById(R.id.real);
         training = findViewById(R.id.training);
         rules = findViewById(R.id.rules);
+        logout = findViewById(R.id.logout);
 
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
             startActivity(new Intent(this, PortalActivity.class));
         }
 
-        real.setOnClickListener(v -> { startActivity(new Intent(this, RealGameActivity.class)); });
-        training.setOnClickListener(v -> { startActivity(new Intent(this, TrainingModeActivity.class)); });
-        rules.setOnClickListener(v -> { startActivity(new Intent(this, RulesActivity.class)); });
-
+        real.setOnClickListener(v -> startActivity(new Intent(this, RealGameActivity.class)));
+        training.setOnClickListener(v -> startActivity(new Intent(this, TrainingModeActivity.class)));
+        rules.setOnClickListener(v -> startActivity(new Intent(this, RulesActivity.class)));
+        logout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MenuActivity.this, PortalActivity.class));
+            finish();
+        });
     }
 }

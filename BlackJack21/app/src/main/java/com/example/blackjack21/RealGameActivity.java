@@ -93,7 +93,7 @@ public class RealGameActivity extends AppCompatActivity {
                         refreshBalance();
                         mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").setValue(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000);
                     } else {
-                        Toast.makeText(this, "Wait " + ((nextClaim - actualTime) / 1000 / 60) + " min", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Wait " + ((nextClaim - actualTime) / 1000 / 60) + 1 + " min", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -478,8 +478,10 @@ public class RealGameActivity extends AppCompatActivity {
                 }
 
                 if(numero >= 1 && !game.getPlayer().getHand().isBusted()){
-                    enable(standButton);
-                    enable(hitButton);
+                    if(!(game.getPlayer().getHand().getValue() == 21 && game.getPlayerCardList().size() == 2)){
+                        enable(standButton);
+                        enable(hitButton);
+                    }
                 }
 
             }
