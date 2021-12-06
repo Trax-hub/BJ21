@@ -1,10 +1,9 @@
 package com.example.blackjack21;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Hand {
-    private ArrayList<Card> cardList;
+    private final ArrayList<Card> cardList;
     private int value;
     private boolean isBusted;               //Verify if the hand get busted (over 21)
 

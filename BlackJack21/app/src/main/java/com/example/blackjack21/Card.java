@@ -1,15 +1,11 @@
 package com.example.blackjack21;
 
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 public class Card {
     private String name;
-    private String color;
-    private int nb;
+    private final String color;
+    private final int nb;
     private int value;
 
     public Card(int nb, String color){
@@ -42,6 +38,7 @@ public class Card {
         return this.color;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name + " " + color;

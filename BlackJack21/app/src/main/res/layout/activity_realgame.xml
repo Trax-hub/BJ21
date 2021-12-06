@@ -4,32 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".RealGameActivity"
     android:background="@color/background1">
+
+    <TextView
+        android:id="@+id/titre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/GameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/GameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/titre">
 
         <AbsoluteLayout
-            android:id="@+id/dealerLayout"
             android:layout_width="match_parent"
             android:layout_height="420dp"
-            android:layout_marginTop="32dp"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
             android:background="@color/background1"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/score"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_x="322dp"
+                android:layout_y="17dp"
+                android:background="@drawable/secondary_button"
+                android:padding="4dp"
+                android:src="@drawable/ic_score" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_x="16dp"
+                android:layout_y="180dp"
+                android:background="@drawable/secondary_button"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/stackIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/stack" />
+
+                <TextView
+                    android:id="@+id/balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/claimMoney"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_x="16dp"
+                android:layout_y="348dp"
+                android:background="@drawable/button_enabled"
+                android:padding="4dp"
+                android:src="@drawable/ic_money" />
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_x="152dp"
+                android:layout_y="200dp"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/dealerValue"
@@ -54,6 +115,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +127,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +140,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +163,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +175,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +188,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -152,6 +211,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +223,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -177,7 +236,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -201,6 +259,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -212,7 +271,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -226,7 +284,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -250,6 +307,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -261,7 +319,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -275,7 +332,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -299,6 +355,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -310,7 +367,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -324,7 +380,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -348,6 +403,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -358,8 +414,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
-                    android:layout_marginBottom="75dp"
-                    android:text="1"
+                    android:layout_marginBottom="75dp
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -373,7 +428,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -398,6 +452,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -409,7 +464,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -423,7 +477,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -447,6 +500,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -458,7 +512,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -472,7 +525,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -496,6 +548,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -507,7 +560,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -521,7 +573,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -545,6 +596,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -556,7 +608,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -570,7 +621,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -594,6 +644,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -605,7 +656,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -619,7 +669,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -643,6 +692,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -654,7 +704,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -668,7 +717,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -692,6 +740,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/c"
+                    android:contentDescription="@string/descCard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -703,7 +752,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="48dp"
                     android:layout_marginBottom="75dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -717,7 +765,6 @@
                     android:layout_marginStart="48dp"
                     android:layout_marginTop="86dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -736,6 +783,7 @@
 
             <ImageView
                 android:id="@+id/stack"
+                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
@@ -744,6 +792,7 @@
 
             <ImageView
                 android:id="@+id/distributableCard"
+                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
@@ -752,6 +801,7 @@
 
             <ImageView
                 android:id="@+id/distributableCard2"
+                android:contentDescription="@string/stack"
                 android:layout_width="60dp"
                 android:layout_height="100dp"
                 android:layout_x="0dp"
@@ -783,6 +833,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@color/background2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/betButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/bet"
+                    android:layout_width="128dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/bet_edit_text"
+                    android:elevation="5dp"
+                    android:inputType="numberDecimal"
+                    android:padding="8dp"
+                    android:text="@string/bet"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/appCompatButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/halfBet"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@color/background3"
+                    android:text="@string/half"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/doubleBet"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@color/background3"
+                    android:text="@string/twox"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/betButton"
                 android:layout_width="wrap_content"
@@ -793,7 +891,7 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout"
                 app:layout_constraintTop_toTopOf="parent">
 
             </androidx.appcompat.widget.AppCompatButton>
@@ -822,7 +920,7 @@
                 android:drawableRight="@drawable/ic_hit"
                 android:drawableTint="@color/purple"
                 android:paddingRight="18dp"
-                android:text="Hit"
+                android:text="@string/hit"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/standButton"
                 app:layout_constraintStart_toStartOf="parent"
@@ -840,7 +938,7 @@
                 android:drawableRight="@drawable/ic_add"
                 android:drawableTint="@color/orange"
                 android:paddingRight="12dp"
-                android:text="Stand"
+                android:text="@string/stand"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/doubleButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -852,7 +950,7 @@
                 android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_enabled"
-                android:text="Double"
+                android:text="@string/dobble"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

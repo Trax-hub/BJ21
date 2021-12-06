@@ -3,9 +3,9 @@ package com.example.blackjack21;
 import java.util.ArrayList;
 
 public class Game {
-    private Player player;
-    private Dealer dealer;
-    private CardStack stack;
+    private final Player player;
+    private final Dealer dealer;
+    private final CardStack stack;
 
     public Game(){
         super();
@@ -45,24 +45,20 @@ public class Game {
             }
             if(this.player.getHand().getValue() == this.dealer.getHand().getValue()){
                 this.player.setLastWin(this.player.getBet());
-                this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
-                return;
             }else{
                 this.player.setLastWin(0);
-                this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
-                return;
             }
+            this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
+            return;
 
         }
 
         if(this.dealer.getHand().isBusted() && !this.player.getHand().isBusted()){
             this.player.setLastWin(this.player.getBet() * 2.);
             this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
-            return;
         }else if (!this.dealer.getHand().isBusted() && this.player.getHand().isBusted()){
             this.player.setLastWin(0);
             this.player.setBalance(this.player.getBalance() + this.player.getLastWin());
-            return;
         }
     }
 

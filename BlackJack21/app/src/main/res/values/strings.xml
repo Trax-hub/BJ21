@@ -2,5 +2,25 @@
     <string name="app_name">Black Jack 21</string>
     <string name="buttonBet">Bet</string>
     <string name="bet">0</string>
-
+    <string name="login">Login</string>
+    <string name="mail">Mail</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign In</string>
+    <string name="titleRG">Real Game :</string>
+    <string name="icRG">Real Game icon</string>
+    <string name="titleTM">Training Mode :</string>
+    <string name="icTM">Training mode icon</string>
+    <string name="icRules">Rules/Help icon</string>
+    <string name="signup">Sign Up</string>
+    <string name="half"><![CDATA[&#189;]]></string>
+    <string name="twox">2x</string>
+    <string name="hit">Hit</string>
+    <string name="stand">Stand</string>
+    <string name="dobble">Double</string>
+    <string name="rules">Rules</string>
+    <string name="scoreboard">Scoreboard</string>
+    <string name="register">Register</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="descCard">Color of the card</string>
+    <string name="stack">Stack</string>
 </resources>

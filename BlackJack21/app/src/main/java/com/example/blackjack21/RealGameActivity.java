@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class RealGameActivity extends AppCompatActivity {
 
     AppCompatButton hitButton, standButton, doubleButton, betButton, halfBet, doubleBet;
     EditText bet;
     TextView balance, playerValue, dealerValue, result;
-    ImageView distributableCard, distributableCard2, stack, claimMoney;
+    ImageView distributableCard, distributableCard2, stack, claimMoney, score;
 
     Game game = new Game();
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_realgame);
 
         mDatabase = FirebaseDatabase.getInstance("https://black-jack-21-ede5c-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
                     bet.setText(Double.toString(Double.parseDouble(bet.getText().toString()) * 2));
                 }
             }
+        });
+
+        score.setOnClickListener(v -> {
+            startActivity(new Intent(this, ScoreBoardActivity.class));
         });
     }
 
@@ -287,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Log.d("balance", String.valueOf(Objects.requireNonNull(task.getResult()).getValue()));
                 if(task.getResult().getValue() != null) {
-                    game.getPlayer().setBalance(Double.parseDouble(Long.toString((Long) task.getResult().getValue())));
+                    game.getPlayer().setBalance(Double.parseDouble(task.getResult().getValue().toString()));
                     balance.setText(Double.toString(game.getPlayer().getBalance()));
                 }
             }
@@ -448,6 +452,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Daily Reward
         claimMoney = findViewById(R.id.claimMoney);
+
+        //ScoreBoard
+        score = findViewById(R.id.score);
     }
 
     private void playerAnimation(int numero) {
@@ -470,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
                     playerAnimation(numero + 1);
                 }
 
-                if(numero >= 1){
+                if(numero >= 1 && !game.getPlayer().getHand().isBusted()){
                     enable(standButton);
                     enable(hitButton);
                 }
@@ -508,10 +515,12 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     loadDealerCard(game.getDealerCardList().get(1), 1);
                     loadDealerCard(game.getDealerCardList().get(numero), numero);
-                    enable(standButton);
-                    enable(hitButton);
-                    if(game.getPlayer().getBalance() >= game.getPlayer().getBet())
-                        enable(doubleButton);
+                    if(!game.getPlayer().isStand()){
+                        enable(standButton);
+                        enable(hitButton);
+                        if(game.getPlayer().getBalance() >= game.getPlayer().getBet())
+                            enable(doubleButton);
+                    }
                 }
                 playerValue.setText(Integer.toString(game.getPlayer().getHand().getValue()));
 

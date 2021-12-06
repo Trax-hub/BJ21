@@ -1,14 +1,12 @@
 package com.example.blackjack21;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class User implements Serializable {
 
-    private String pseudo, mail, uid;
+    private String pseudo;
+    private String mail;
+    private String uid;
     private Double balance;
     private Long rewardTime;
 
@@ -25,16 +23,12 @@ public class User implements Serializable {
         return pseudo;
     }
 
-    public String getMail(){
-        return mail;
-    }
+    public String getMail() { return mail; }
 
-    public String getUid() {
-        return uid;
-    }
+    public String getUid() { return uid; }
 
-    public Double getBalance() { return balance;}
+    public Double getBalance() { return balance; }
 
-    public Long getRewardTime() { return rewardTime;}
+    public Long getRewardTime() { return rewardTime; }
 
 }

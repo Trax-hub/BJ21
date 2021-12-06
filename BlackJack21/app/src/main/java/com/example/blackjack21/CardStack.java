@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 public class CardStack {
-    private List cardList;
+    private final List<Card> cardList;
 
     public CardStack(){
-        this.cardList = new ArrayList<Card>();
+        this.cardList = new ArrayList<>();
         addAllTheCards();
     }
 

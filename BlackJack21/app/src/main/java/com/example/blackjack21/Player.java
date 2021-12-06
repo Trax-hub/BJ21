@@ -30,8 +30,7 @@ public class Player{
     public void setBet(double bet){ this.bet = bet; }
 
     public void setBalance(double balance){
-        double roundBalance = Math.round(balance*100.0)/100.0;
-        this.balance = roundBalance; }
+        this.balance = Math.round(balance*100.0)/100.0; }
 
     public double getBalance(){ return this.balance; }
 
@@ -39,7 +38,7 @@ public class Player{
 
     public void setStand(boolean state){this.isStand = state; }
 
-    public void setHand(Hand hand) { this.hand = new Hand(); }
+    public void setHand(Hand hand) { this.hand = hand; }
 
     public void setLastWin(double win){ this.lastWin = win; }
 

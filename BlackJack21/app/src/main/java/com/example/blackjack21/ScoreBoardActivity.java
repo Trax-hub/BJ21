@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ScoreBoardActivity extends AppCompatActivity {
 
@@ -26,11 +27,6 @@ public class ScoreBoardActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-
-        if(FirebaseAuth.getInstance().getCurrentUser() == null){
-            startActivity(new Intent(this, PortalActivity.class));
-            finish();
-        }
 
         db = FirebaseDatabase.getInstance("https://black-jack-21-ede5c-default-rtdb.europe-west1.firebasedatabase.app");
         users = new ArrayList<>();
@@ -50,12 +46,13 @@ public class ScoreBoardActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             int i = 0;
                             for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                                users.add(new User(dataSnapshot.child("pseudo").getValue().toString(), dataSnapshot.child("mail").getValue().toString(), dataSnapshot.child("uid").getValue().toString(), (Double) dataSnapshot.child("balance").getValue(), (Long) dataSnapshot.child("rewardTime").getValue()));
+                                users.add(new User(dataSnapshot.child("pseudo").getValue().toString(), dataSnapshot.child("mail").getValue().toString(), dataSnapshot.child("uid").getValue().toString(), Double.parseDouble(dataSnapshot.child("balance").getValue().toString()), (Long) dataSnapshot.child("rewardTime").getValue()));
                                 i++;
                                 if(i > 9){
                                     break;
                                 }
                             }
+                            Collections.reverse(users);
                             display(users);
                         }
                     }

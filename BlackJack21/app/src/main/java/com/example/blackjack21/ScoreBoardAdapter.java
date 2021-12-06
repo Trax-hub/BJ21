@@ -31,6 +31,8 @@ public class ScoreBoardAdapter  extends ArrayAdapter<User> {
         }
         TextView pseudo = view.findViewById(R.id.pseudo);
         TextView balance = view.findViewById(R.id.balance);
+        TextView rank = view.findViewById(R.id.rank);
+        rank.setText(Integer.toString(position + 1));
         pseudo.setText(user.getPseudo());
         balance.setText(user.getBalance().toString());
 
