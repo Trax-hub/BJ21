@@ -135,9 +135,7 @@ public class RealGameActivity extends AppCompatActivity {
             }
         });
 
-        score.setOnClickListener(v -> {
-            startActivity(new Intent(this, ScoreBoardActivity.class));
-        });
+        score.setOnClickListener(v -> startActivity(new Intent(this, ScoreBoardActivity.class)));
     }
 
 
