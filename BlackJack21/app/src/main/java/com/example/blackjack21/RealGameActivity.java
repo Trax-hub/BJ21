@@ -95,7 +95,7 @@ public class RealGameActivity extends AppCompatActivity {
                         refreshBalance();
                         mDatabase.child("Users/" + firebaseUser.getUid() + "/rewardTime").setValue(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000);
                     } else {
-                        Toast.makeText(this, "Wait " + ((nextClaim - actualTime) / 1000 / 60) + 1 + " min", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Wait " + (((nextClaim - actualTime) / 1000 / 60) + 1) + " min", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -193,7 +193,7 @@ public class RealGameActivity extends AppCompatActivity {
     private void stand() {
         game.getPlayer().setStand(true);
 
-        loadDealerCard((Card) game.getDealer().getHand().getcardList().get(1), 1);
+        loadDealerCard(game.getDealer().getHand().getcardList().get(1), 1);
 
         int startingNbCard = game.getDealer().getHand().getcardList().size();
 
