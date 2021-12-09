@@ -315,6 +315,9 @@ public class RealGameActivity extends AppCompatActivity {
         game.getPlayer().setHand(new Hand());
         game.getDealer().setHand(new Hand());
 
+        //Reset lastwin
+        game.getPlayer().setLastWin(0);
+
         //Hide card's layouts
         for (ConstraintLayout card : playerCard){
             card.setVisibility(View.INVISIBLE);

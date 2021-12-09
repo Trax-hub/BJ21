@@ -18,13 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LogInActivity" android:exported="true"/>
-        <activity android:name=".SignUpActivity" android:exported="true"/>
-        <activity android:name=".PortalActivity" android:exported="true"/>
-        <activity android:name=".ScoreBoardActivity" android:exported="true"/>
-        <activity android:name=".RealGameActivity" android:exported="true"/>
-        <activity android:name=".TrainingModeActivity" android:exported="true"/>
-        <activity android:name=".RulesActivity" android:exported="true"/>
+        <activity android:name=".LogInActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".SignUpActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".PortalActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".ScoreBoardActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".RealGameActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".TrainingModeActivity" android:exported="true" android:screenOrientation="fullSensor"/>
+        <activity android:name=".RulesActivity" android:exported="true" android:screenOrientation="fullSensor"/>
 
     </application>
 
