@@ -337,6 +337,11 @@ public class RealGameActivity extends AppCompatActivity {
         //Actualize balance
         game.getPlayer().setStand(false);
         game.getDealer().setStand(false);
+
+        //disable buttons
+        disable(hitButton);
+        disable(standButton);
+        disable(doubleButton);
     }
 
     @SuppressLint("SetTextI18n")
