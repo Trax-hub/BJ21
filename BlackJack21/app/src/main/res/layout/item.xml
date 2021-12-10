@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:width="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/pseudo"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +26,7 @@
 
         <TextView
             android:id="@+id/pseudo"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +36,7 @@
 
         <TextView
             android:id="@+id/balance"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
